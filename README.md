@@ -35,5 +35,23 @@ A torus-knot with MeshNormalMaterial renders into a 110×56 WebGLRenderTarget; t
 ### 09 — Generative finale (Canvas 2D flow field)
 A permutation-table value noise (two octaves) defines a flow field whose base angle is seeded by the time of day — the whole field slowly rotates through 360° across 24 h, and the noise table is seeded from hh:mm, so every visit composes differently. 1400 particles integrate the field, leave trails via a low-alpha fill each frame, are repelled by the pointer, and respawn when they exit or randomly (keeps density uniform). Doubles as the footer behind the contact links.
 
+### 10 — Dither (Three.js RTT + ordered-dither post shader)
+The scene (icosahedron + torus, one orbiting directional light) renders into a 420×262 target that is never upscaled internally — the post quad outputs at the same resolution and CSS `image-rendering: pixelated` provides the chunky pixels. The post shader thresholds luminance against either a recursive Bayer-8 matrix (computed arithmetically, no lookup texture) or interleaved gradient noise (a blue-noise-like isotropic threshold), then maps to a 1-bit background/phosphor pair or a 4-level near-black → deep-green → phosphor → off-white ramp, Obra Dinn style. Both dither mode and palette toggle via uniforms.
+
+### 11 — Cloth (verlet + distance constraints, Canvas 2D)
+A 42×24 particle grid integrates position-verlet with damping, gravity, and a spatially varying sine wind; every third top node is pinned. Three Gauss-Seidel iterations per frame satisfy the structural distance constraints; a constraint stretched past 3.4× its rest length dies (tear), and yanking the grabbed node farther than ~2 cells shreds its local constraints. Rendering is a translucent quad fill shaded by local stretch (a cheap stand-in for lighting) under a single batched wireframe path.
+
+### 12 — Raymarch (raw WebGL2 fullscreen SDF)
+A 90-step sphere-tracer over a `map()` of sphere ⊔ torus ⊔ box ⊔ ground, all blended with polynomial smooth-min so the shapes read as one morphing mass. Shading: central-difference normals, iq-style soft shadows (penumbra from the closest-miss ratio during the shadow march), one-tap ambient occlusion, specular + fresnel rim in the accent color, and distance fog into the page background. The key light hangs off the smoothed pointer position. Marches at 0.7× DPR since the SDF march dominates cost.
+
+### 13 — Metaballs (marching squares, Canvas 2D)
+Seven blobs orbit anchors while the pointer contributes its own ball; the scalar field `Σ r²/d²` is evaluated on a 10px grid. Marching squares with linear edge interpolation extracts a crisp iso-contour (all 16 cell cases, including the two saddles); the interior fills as batched horizontal cell spans under an animated linear gradient, so merges and splits stay gooey.
+
+### 14 — Boids (flocking + spatial hash, Canvas 2D)
+Classic separation/alignment/cohesion steering with clamped force and a speed floor so the flock never stalls. Neighbor lookup uses a spatial hash rebuilt each frame (cell size = view radius, 9-cell probe), taking the pairwise test from O(n²) to O(n·k) for 300 agents. The pointer is a predator: boids inside its radius get a strong distance-weighted flee force and brighten. Motion trails come free from a translucent background fill; agents draw as velocity-aligned triangles.
+
+### 15 — Halftone (raw WebGL2, rotated print screens)
+The "image" is itself procedural — drifting Gaussian blobs plus a diagonal sweep define a luminance field. Three halftone screens sample it at the classic print angles (15°/45°/75°), each with its own cell size and ink (deep green, phosphor, off-white): per fragment the pixel is rotated into screen space, snapped to its cell, the source luminance is sampled at the cell center back in image space, and the dot radius is `√lum` (area-linear coverage, like real halftoning). Overlapping screens produce the rosette moiré; a Gaussian falloff around the pointer adds dot gain.
+
 ## Extraction notes
 Each module is a self-contained folder exporting `init(section, { reducedMotion }) → { pause, resume, destroy }` with no cross-module imports — copy the folder, provide a container element, and wire the lifecycle to your own observer.
