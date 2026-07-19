@@ -40,7 +40,7 @@ for (const vp of VIEWPORTS) {
     await page.evaluate((id) => {
       document.getElementById(id).scrollIntoView({ behavior: "instant", block: "start" });
     }, s.id);
-    await page.waitForTimeout(1300); // let module lazy-init + settle
+    await page.waitForTimeout(1700); // let module lazy-init + settle
     const num = s.mod.split("-")[0];
     const name = s.mod.slice(num.length + 1);
     const file = `output/${num}-${name}${vp.tag === "mobile" ? "-mobile" : ""}.png`;
