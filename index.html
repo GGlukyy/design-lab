@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Interactive Design Lab</title>
+  <link rel="stylesheet" href="/src/styles/base.css" />
+</head>
+<body>
+
+  <!-- 01 · HERO / FLUID -->
+  <section class="lab-section" id="s01" data-module="01-fluid">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">01</span> / FLUID</div>
+    <div class="readout-status">GPU · STABLE-FLUIDS</div>
+    <div class="section-content">
+      <h1 class="h-hero">Design<br />Lab_</h1>
+      <p class="mono-note">Nine interactive systems, written from scratch. WebGL · GLSL · Canvas · zero effect libraries.</p>
+    </div>
+  </section>
+
+  <!-- 02 · PARTICLE TEXT MORPH -->
+  <section class="lab-section" id="s02" data-module="02-particles">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">02</span> / SCRAMBLE</div>
+    <div class="readout-status">INSTANCED POINTS · CURL NOISE</div>
+    <div class="section-content"></div>
+  </section>
+
+  <!-- 03 · CRT / GLITCH PANEL -->
+  <section class="lab-section" id="s03" data-module="03-crt">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">03</span> / CRT</div>
+    <div class="readout-status">POST-PROCESS · VHS</div>
+    <div class="section-content"></div>
+  </section>
+
+  <!-- 04 · MAGNETIC / ELASTIC -->
+  <section class="lab-section" id="s04" data-module="04-magnetic">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">04</span> / MAGNET</div>
+    <div class="readout-status">SPRING PHYSICS · SVG</div>
+    <div class="section-content"></div>
+  </section>
+
+  <!-- 05 · INFINITE DRAG GRID -->
+  <section class="lab-section" id="s05" data-module="05-grid">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">05</span> / GRID</div>
+    <div class="readout-status">INERTIAL DRAG · RGB SHIFT</div>
+    <div class="section-content"></div>
+  </section>
+
+  <!-- 06 · SCROLL CORRIDOR -->
+  <section class="lab-section" id="s06" data-module="06-corridor" style="min-height:100vh">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">06</span> / CORRIDOR</div>
+    <div class="readout-status">SCROLL-BOUND CAMERA</div>
+    <div class="section-content"></div>
+  </section>
+
+  <!-- 07 · KINETIC TYPE -->
+  <section class="lab-section" id="s07" data-module="07-kinetic">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">07</span> / KINETIC</div>
+    <div class="readout-status">PATH TEXT · VELOCITY MARQUEE</div>
+    <div class="section-content"></div>
+  </section>
+
+  <!-- 08 · ASCII RENDERER -->
+  <section class="lab-section" id="s08" data-module="08-ascii">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">08</span> / ASCII</div>
+    <div class="readout-status">DENSITY MAP · UNICODE</div>
+    <div class="section-content"></div>
+  </section>
+
+  <!-- 09 · GENERATIVE FINALE -->
+  <section class="lab-section" id="s09" data-module="09-finale">
+    <div class="fx-layer"></div>
+    <div class="readout"><span class="idx">09</span> / FINALE</div>
+    <div class="readout-status">FLOW FIELD · TIME-SEEDED</div>
+    <div class="section-content"></div>
+  </section>
+
+  <div class="grain-overlay"></div>
+  <div class="scanline-overlay"></div>
+
+  <nav class="lab-nav" aria-label="Section index">
+    <a href="#s01" aria-label="01 fluid"></a>
+    <a href="#s02" aria-label="02 scramble"></a>
+    <a href="#s03" aria-label="03 crt"></a>
+    <a href="#s04" aria-label="04 magnet"></a>
+    <a href="#s05" aria-label="05 grid"></a>
+    <a href="#s06" aria-label="06 corridor"></a>
+    <a href="#s07" aria-label="07 kinetic"></a>
+    <a href="#s08" aria-label="08 ascii"></a>
+    <a href="#s09" aria-label="09 finale"></a>
+  </nav>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
