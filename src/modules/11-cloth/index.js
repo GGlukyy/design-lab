@@ -58,7 +58,10 @@ export default async function init(section, { reducedMotion }) {
     }
   }
   build();
-  content.querySelector(".cloth-reset").addEventListener("click", build);
+  content.querySelector(".cloth-reset").addEventListener("click", () => {
+    mdown = false; grab = -1;
+    build();
+  });
 
   // ── pointer grab ──
   let grab = -1, mx = 0, my = 0, mdown = false;
@@ -69,9 +72,14 @@ export default async function init(section, { reducedMotion }) {
   }
   function down(e) {
     toLocal(e);
+    // capture so pointerup always reaches us, even released outside the window —
+    // otherwise the grab sticks and the cloth keeps shredding "on its own"
+    layer.setPointerCapture?.(e.pointerId);
     mdown = true;
-    let best = 40 * dpr * 40 * dpr;
+    grab = -1;
+    let best = 50 * dpr * 50 * dpr;
     for (let i = 0; i < pts.length; i++) {
+      if (pts[i].pin) continue;
       const d = (pts[i].x - mx) ** 2 + (pts[i].y - my) ** 2;
       if (d < best) { best = d; grab = i; }
     }
@@ -81,6 +89,8 @@ export default async function init(section, { reducedMotion }) {
   layer.addEventListener("pointerdown", down);
   addEventListener("pointermove", move, { passive: true });
   addEventListener("pointerup", up, { passive: true });
+  addEventListener("pointercancel", up, { passive: true });
+  addEventListener("blur", up);
 
   let raf = 0, running = true, t = 0;
   function step() {
@@ -101,16 +111,17 @@ export default async function init(section, { reducedMotion }) {
       p.y += vy + 0.16 * dpr; // gravity
     }
 
-    // grabbed node follows pointer; violent pulls tear nearby constraints
+    // grabbed node eases toward the pointer with a capped step — no teleporting,
+    // so fast mouse moves stretch the cloth instead of detonating it. Tearing
+    // happens only through the natural overstretch check in the solver below.
     if (mdown && grab >= 0) {
       const g = pts[grab];
-      const pullDist = Math.hypot(mx - g.x, my - g.y);
-      g.x = mx; g.y = my; g.px = mx; g.py = my;
-      if (pullDist > spacing * 2.2) {
-        for (const c of cons) {
-          if (!c.dead && (c.a === grab || c.b === grab) && Math.random() < 0.5) c.dead = true;
-        }
-      }
+      const dx = mx - g.x, dy = my - g.y;
+      const d = Math.hypot(dx, dy);
+      const maxStep = spacing * 0.9;
+      const f = d > maxStep ? maxStep / d : 1;
+      g.x += dx * f; g.y += dy * f;
+      g.px = g.x; g.py = g.y;
     }
 
     // satisfy constraints + tear on overstretch
@@ -183,6 +194,8 @@ export default async function init(section, { reducedMotion }) {
       layer.removeEventListener("pointerdown", down);
       removeEventListener("pointermove", move);
       removeEventListener("pointerup", up);
+      removeEventListener("pointercancel", up);
+      removeEventListener("blur", up);
       canvas.remove();
     },
   };

@@ -54,8 +54,10 @@ a { color: inherit; }
   margin-inline: auto;
   pointer-events: none;
 }
+/* !important so it survives inline `all: unset` on styled buttons, which would
+   otherwise reset pointer-events back to the inherited `none` and make them dead */
 .section-content :is(a, button, input, [data-interactive]) {
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 /* ── readout label: `01 / FLUID` ── */
@@ -95,6 +97,28 @@ a { color: inherit; }
   color: var(--ink-faint);
   text-transform: uppercase;
   pointer-events: none;
+}
+
+/* ── copy-source button ── */
+.copy-src {
+  all: unset;
+  position: absolute;
+  bottom: calc(var(--gutter) * 0.75);
+  right: var(--gutter);
+  z-index: 4;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  color: var(--ink-dim);
+  border: 1px solid var(--line-strong);
+  padding: 0.6em 1.2em;
+  background: rgba(10, 10, 12, 0.6);
+  transition: color var(--dur-fast) var(--ease-mech), border-color var(--dur-fast) var(--ease-mech);
+}
+.copy-src:hover {
+  color: var(--accent);
+  border-color: var(--accent-dim);
 }
 
 /* ── typography helpers ── */

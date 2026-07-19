@@ -39,9 +39,10 @@ export default async function init(section, { reducedMotion }) {
     <div style="display:flex;flex-direction:column;gap:2.2rem">
       <h2 class="h-section">End of<br/>Transmission</h2>
       <p class="mono-note">flow field seeded ${seedLabel} · field angle ${(baseAngle * 57.3).toFixed(0)}° · regenerates with the clock</p>
-      <div style="display:flex;gap:2.5rem;font-family:var(--font-mono);font-size:var(--fs-label);letter-spacing:var(--tracking-label)">
-        <a data-interactive href="mailto:hello@example.com" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-dim);padding-bottom:0.4em">MAIL ↗</a>
-        <a data-interactive href="#" style="color:var(--ink-dim);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:0.4em">GITHUB ↗</a>
+      <div style="display:flex;gap:2.5rem;flex-wrap:wrap;font-family:var(--font-mono);font-size:var(--fs-label);letter-spacing:var(--tracking-label)">
+        <a data-interactive href="https://github.com/GGlukyy" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-dim);padding-bottom:0.4em">GITHUB ↗</a>
+        <a data-interactive href="https://ggluki.itch.io/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-dim);padding-bottom:0.4em">ITCH.IO ↗</a>
+        <a data-interactive href="mailto:luki.lokvenc@gmail.com" style="color:var(--ink-dim);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:0.4em">MAIL ↗</a>
         <a data-interactive href="#s01" style="color:var(--ink-dim);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:0.4em">RESTART ↺</a>
       </div>
     </div>`;
@@ -62,8 +63,8 @@ export default async function init(section, { reducedMotion }) {
   function resize() {
     W = canvas.width = layer.clientWidth * dpr;
     H = canvas.height = layer.clientHeight * dpr;
-    ctx.fillStyle = "#0a0a0c";
-    ctx.fillRect(0, 0, W, H);
+    // canvas stays transparent — the section's #0a0a0c shows through, so the
+    // background is genuinely black instead of accumulated trail residue
   }
   resize();
 
@@ -91,9 +92,12 @@ export default async function init(section, { reducedMotion }) {
     raf = requestAnimationFrame(step);
     t += 0.004;
 
-    // trail fade
-    ctx.fillStyle = "rgba(10,10,12,0.06)";
+    // trail fade: destination-out erases alpha, so old strokes decay to fully
+    // transparent instead of leaving a gray-green residue floor
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.fillStyle = "rgba(0,0,0,0.07)";
     ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "source-over";
 
     ctx.lineWidth = 1 * dpr;
     for (let i = 0; i < COUNT; i++) {

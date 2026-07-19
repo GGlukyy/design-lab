@@ -47,7 +47,10 @@ export default async function init(section, { reducedMotion }) {
     return {};
   }
 
-  // pin the canvas within the tall section
+  // pin the canvas within the tall section.
+  // position:sticky is dead inside an overflow:hidden ancestor — the section
+  // must allow overflow for the sticky layer to track the viewport.
+  section.style.overflow = "visible";
   layer.style.inset = "auto";
   layer.style.position = "sticky";
   layer.style.top = "0";

@@ -10,7 +10,6 @@ const registry = {
   "07-kinetic": () => import("./modules/07-kinetic/index.js"),
   "08-ascii": () => import("./modules/08-ascii/index.js"),
   "09-finale": () => import("./modules/09-finale/index.js"),
-  "10-dither": () => import("./modules/10-dither/index.js"),
   "11-cloth": () => import("./modules/11-cloth/index.js"),
   "12-raymarch": () => import("./modules/12-raymarch/index.js"),
   "13-metaballs": () => import("./modules/13-metaballs/index.js"),
@@ -56,6 +55,37 @@ const io = new IntersectionObserver(
 );
 
 document.querySelectorAll(".lab-section[data-module]").forEach((el) => io.observe(el));
+
+// ── copy-source buttons: grab the module's own code to the clipboard ──
+// lazy raw imports so source ships only when requested
+const rawFiles = import.meta.glob("./modules/*/*.js", { query: "?raw", import: "default" });
+
+document.querySelectorAll(".lab-section[data-module]").forEach((el) => {
+  const name = el.dataset.module;
+  const btn = document.createElement("button");
+  btn.className = "copy-src";
+  btn.dataset.interactive = "";
+  btn.textContent = "⧉ COPY SRC";
+  btn.title = "Copy this effect's source code";
+  btn.addEventListener("click", async () => {
+    try {
+      const paths = Object.keys(rawFiles).filter((p) => p.includes(`/${name}/`));
+      const parts = await Promise.all(
+        paths.map(async (p) => `// ─── ${p.replace("./modules/", "")} ───\n${await rawFiles[p]()}`)
+      );
+      const header =
+        `// Interactive Design Lab — module ${name}\n` +
+        `// Vanilla ESM. Usage: init(sectionEl, { reducedMotion }) → { pause, resume, destroy }\n` +
+        `// The section needs a child <div class="fx-layer"> and <div class="section-content">.\n\n`;
+      await navigator.clipboard.writeText(header + parts.join("\n\n"));
+      btn.textContent = "COPIED ✓";
+    } catch {
+      btn.textContent = "COPY FAILED";
+    }
+    setTimeout(() => { btn.textContent = "⧉ COPY SRC"; }, 1600);
+  });
+  el.appendChild(btn);
+});
 
 // ── section index nav highlight ──
 const navLinks = [...document.querySelectorAll(".lab-nav a")];
