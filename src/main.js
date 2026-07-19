@@ -10,6 +10,12 @@ const registry = {
   "07-kinetic": () => import("./modules/07-kinetic/index.js"),
   "08-ascii": () => import("./modules/08-ascii/index.js"),
   "09-finale": () => import("./modules/09-finale/index.js"),
+  "10-dither": () => import("./modules/10-dither/index.js"),
+  "11-cloth": () => import("./modules/11-cloth/index.js"),
+  "12-raymarch": () => import("./modules/12-raymarch/index.js"),
+  "13-metaballs": () => import("./modules/13-metaballs/index.js"),
+  "14-boids": () => import("./modules/14-boids/index.js"),
+  "15-halftone": () => import("./modules/15-halftone/index.js"),
 };
 
 export const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
