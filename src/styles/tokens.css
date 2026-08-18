@@ -1,0 +1,35 @@
+/* ── Interactive Design Lab · design tokens ─────────────────────── */
+:root {
+  /* palette */
+  --bg: #0a0a0c;
+  --bg-raise: #101014;
+  --bg-panel: #121218;
+  --ink: #e8e6e1;
+  --ink-dim: #8a8880;
+  --ink-faint: #4a4944;
+  --accent: #33ff99;
+  --accent-dim: rgba(51, 255, 153, 0.35);
+  --accent-glow: rgba(51, 255, 153, 0.12);
+  --line: rgba(232, 230, 225, 0.09);
+  --line-strong: rgba(232, 230, 225, 0.18);
+
+  /* type */
+  --font-ui: "Inter", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "Cascadia Mono", "JetBrains Mono", "Consolas", monospace;
+  --fs-hero: clamp(3rem, 9vw, 8.5rem);
+  --fs-h2: clamp(2rem, 5.5vw, 4.5rem);
+  --fs-body: clamp(0.95rem, 1.1vw, 1.05rem);
+  --fs-label: 0.72rem;
+  --tracking-label: 0.18em;
+
+  /* motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-mech: cubic-bezier(0.7, 0, 0.2, 1);
+  --dur-fast: 180ms;
+  --dur-med: 450ms;
+  --dur-slow: 900ms;
+
+  /* layout */
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --max-w: 1600px;
+}
